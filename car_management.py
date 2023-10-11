@@ -27,6 +27,7 @@ class CarManager:
     @property
     def get_make(self):
         return self._make
+    
 
     @get_make.setter
     def set_make(self, new_make):
@@ -50,6 +51,18 @@ class CarManager:
     def set_year(self, new_year):
         if isinstance(new_year,int) and new_year>1900:
             self._year=new_year
+
+    @classmethod
+    def add_a_car(cls):
+        id = max(CarManager.all_cars.keys()) if CarManager.all_cars.keys() else 1
+        make = input("Enter the car's make:")
+        model = input("Enter the car's model:")
+        year = input("Enter the car's year:")   
+        cls(id,make,model,year)    
+        print(cls.all_cars)
+        print("Car added successfully!")
+        return prompt()
+
 
     def add_mileage(self, mileage):
         if isinstance(mileage, int) and mileage>0:
@@ -75,40 +88,46 @@ def prompt():
     match choice:
         
         case '1':
-            id = CarManager.total_cars
-            make = input("Enter the car's make:")
-            model = input("Enter the car's model:")
-            year = input("Enter the car's year:")
-
-            new_car = CarManager(id,make,model,year)
-            #CarManager.all_cars
+            CarManager.add_a_car()    
 
         case '2':
-            print(CarManager.all_cars)
-
+            for car in CarManager.all_cars.values():
+                print(f"{car.get_year} {car.get_make} {car.get_model}")
+            return prompt()
+    
         case '3':
-            print(CarManager.total_cars)
+            print(f"Total Cars: {CarManager.total_cars}")
+            return prompt()
 
         case '4':
             id_of_car = int(input("Please enter the car's id':"))
+            print(CarManager.all_cars.get(id_of_car))
 
-            for car in CarManager.all_cars:
-                if car == id_of_car:
-                    user_car = CarManager.all_cars[car]
-                    print(user_car)
+            # for car in CarManager.all_cars:
+            #     if car == id_of_car:
+            #         user_car = CarManager.all_cars[car]
+            #         print(user_car)
 
         case '5':
+            car_id = int(input("Enter the car's id: "))
+            car = CarManager.all_cars.get(car_id)
             new_service = input("Enter the service for the car:")
+            car.add_services = new_service
+            return prompt()
 
-            CarManager.add_services(new_service)
 
         case '6':
+            car_id = int(input("Enter the car's id: "))
+            
+            car = CarManager.all_cars.get(car_id)
             new_mileage = int(input("Enter the mileage you need to add: "))
 
-            CarManager.add_mileage(new_mileage)
+            car.set_mileage = new_mileage
+            return prompt()
 
         case '7':
-            prompt()
+            print("Thank you, please come again!")
+            exit()
 
 
 prompt()
@@ -126,6 +145,10 @@ prompt()
 
 
 car_one = CarManager(1, "Ford", "Escort", 2001)
+car_two = CarManager(2,"Mazda", "Tribute", 2006)
+car_three = CarManager(3, "Nissan", "Versa Note", 2016)
+
+print(CarManager.all_cars)
 
 
-print(car_one)
+#print(car_one)
